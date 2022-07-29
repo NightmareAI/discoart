@@ -19,7 +19,14 @@ import threading
 from queue import SimpleQueue
 from docarray import DocumentArray, Document
 
+import yaml
+from yaml import Loader
 
+with open(
+    f'/src/discoart/resources/models.yml'
+) as ymlfile:
+    model_list = yaml.load(ymlfile, Loader=Loader)
+del model_list["secondary"]
 
 default_clip_models = [
     'ViT-B-32::openai',
@@ -37,7 +44,7 @@ class Predictor(BasePredictor):
             load_clip_models,
             load_secondary_model,
             get_device,
-            free_memory,
+            free_memory,            
         )
         from discoart.config import (
             load_config,
@@ -66,24 +73,7 @@ class Predictor(BasePredictor):
             description="Width of the output image, higher numbers will take longer", default=1280),
         height: int = Input(
             description="Height of the output image, higher numbers will take longer", default=768),
-        diffusion_model: str = Input(description="Diffusion Model", default="512x512_diffusion_uncond_finetune_008100", choices=[
-            "512x512_diffusion_uncond_finetune_008100",
-            "256x256_diffusion_uncond",
-            "pixel_art_diffusion_hard_256",
-            "pixel_art_diffusion_soft_256",
-            "pixelartdiffusion_expanded",
-            "pixelartdiffusion4k",
-            "PADexpanded",
-            "watercolordiffusion",
-            "watercolordiffusion_2",
-            "PulpSciFiDiffusion",
-            "256x256_openai_comics_faces_by_alex_spirin_084000",
-            "lsun_uncond_100M_1200K_bs128",
-            "ukiyoe_diffusion_256_022000",
-            "liminal_diffusion",
-            "portrait_generator_v001_ema_0.9999_1MM",
-            "floraldiffusion",
-        ]),
+        diffusion_model: str = Input(description="Diffusion Model", default="512x512_diffusion_uncond_finetune_008100", choices=model_list.keys()),
         diffusion_sampling_mode: str = Input(
             description="Diffusion Sampling Mode", default="ddim", choices=["plms", "ddim"]),
         ViTB32: bool = Input(description="Use ViTB32 model", default=True),
@@ -211,31 +201,31 @@ class Predictor(BasePredictor):
       if RN101:
         clip_models.append("RN101::openai")
       if ViTB32_laion2b_e16:
-        clip_models.append("ViTB32::laion2b_e16")
+        clip_models.append("ViT-B-32::laion2b_e16")
       if ViTB32_laion400m_e31:
-        clip_models.append("ViTB32::laion400m_e31")
+        clip_models.append("ViT-B-32::laion400m_e31")
       if ViTB32_laion400m_e32:
-        clip_models.append("ViTB32::laion400m_e32")
+        clip_models.append("ViT-B-32::laion400m_e32")
       if ViTB32quickgelu_laion400m_e31:
-        clip_models.append("ViTB32::quickgelu_laion400m_e31")
+        clip_models.append("ViT-B-32-quickgelu::laion400m_e31")
       if ViTB32quickgelu_laion400m_e32:
-        clip_models.append("ViTB32::quickgelu_laion400m_e32")
+        clip_models.append("ViT-B-32-quickgelu::laion400m_e32")
       if ViTB16_laion400m_e31:
-        clip_models.append("ViTB16::laion400m_e31")
+        clip_models.append("ViT-B-16::laion400m_e31")
       if ViTB16_laion400m_e32:
-        clip_models.append("ViTB16::laion400m_e32")
+        clip_models.append("ViT-B-16::laion400m_e32")
       if RN50_yffcc15m:
         clip_models.append("RN50::yffcc15m")
       if RN50_cc12m:
         clip_models.append("RN50::cc12m")
       if RN50_quickgelu_yfcc15m:
-        clip_models.append("RN50::quickgelu_yfcc15m")
+        clip_models.append("RN50-quickgelu::yfcc15m")
       if RN50_quickgelu_cc12m:
-        clip_models.append("RN50::quickgelu_cc12m")
+        clip_models.append("RN50-quickgelu::cc12m")
       if RN101_yfcc15m:
         clip_models.append("RN101::yfcc15m")
       if RN101_quickgelu_yfcc15m:
-        clip_models.append("RN101::quickgelu_yfcc15m")
+        clip_models.append("RN101-quickgelu::yfcc15m")
       
       if (clip_models != self.clip_model_list):
         self.clip_model_list = clip_models
@@ -263,10 +253,10 @@ class Predictor(BasePredictor):
         pb_path = os.path.join(get_output_dir(_name), 'da.protobuf.lz4')
         if os.path.exists(pb_path):
           _da = DocumentArray.load_binary(pb_path)
-          with tempfile.TemporaryDirectory() as tmp:
-            result_file = f'{tmp}/discoart-result.png'
-            _da[0].save_uri_to_file(result_file)
-            yield(Path(result_file))
+          tmp = tempfile.mkdtemp()
+          result_file = f'{tmp}/discoart-result.png'
+          _da[0].save_uri_to_file(result_file)
+          yield(Path(result_file))
 
     def worker(self):
       from discoart.runner import do_run
