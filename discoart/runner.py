@@ -30,7 +30,7 @@ from .persist import _sample_thread, _persist_thread, _save_progress_thread
 from .prompt import PromptPlanner
 
 
-def do_run(args, models, device, events) -> 'DocumentArray':
+def do_run(args, models, device, events, image_callback=None) -> 'DocumentArray':
     skip_event, stop_event = events
 
     output_dir = get_output_dir(args.name_docarray)
@@ -380,6 +380,7 @@ def do_run(args, models, device, events) -> 'DocumentArray':
                     d,
                     _d_gif,
                     image_display,
+                    image_callback,
                     j,
                     loss_values,
                     output_dir,

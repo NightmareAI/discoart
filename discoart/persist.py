@@ -24,6 +24,7 @@ def _sample(
     d,
     _d_gif,
     image_display,
+    image_callback,
     j,
     loss_values,
     output_dir,
@@ -52,9 +53,11 @@ def _sample(
                 if cur_t == -1:
                     c.save_uri_to_file(os.path.join(output_dir, f'{_nb}-done-{k}.png'))
                 else:
-                    c.save_uri_to_file(
-                        os.path.join(output_dir, f'{_nb}-step-{j}-{k}.png')
-                    )
+                    step_file=os.path.join(output_dir, f'{_nb}-step-{j}-{k}.png')
+                    c.save_uri_to_file(step_file)
+                    if image_callback:
+                        image_callback(step_file)
+
 
                 d.chunks.append(c)
                 # root doc always update with the latest progress
