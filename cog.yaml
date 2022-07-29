@@ -1,0 +1,74 @@
+build:
+  gpu: true
+  cuda: "11.3"
+
+  system_packages:
+    - "ffmpeg"
+    - "libsm6"
+    - "libxext6"
+    - "libglib2.0-0"    
+
+  python_version: "3.8"
+  python_packages:
+    - "numpy==1.23.1"
+    - "lpips==0.1.4"
+    - "ftfy==6.1.1"
+    - "docarray[common]==0.13.33"
+    - "pyyaml==6.0"
+    - "open-clip-torch==1.3.0"
+    - "pyspellchecker==0.6.3"
+    - "jina==3.7.3"
+    - "guided-diffusion-sdk==1.0.0"
+    - "resize-right-sdk==1.0.2"
+    - "openai-clip==1.0.1"
+    - "packaging==21.3"
+    - "torch==1.11.0"
+    - "torchvision==0.12.0"
+
+  run:    
+    - pip install torch==1.11.0+cu113 torchvision==0.12.0+cu113 pytorch-lightning torch-fidelity -f https://download.pytorch.org/whl/torch_stable.html
+    - mkdir -p /root/.cache/discoart
+    - wget --quiet --output-document=/root/.cache/discoart/dpt_large-midas-2f21e586.pt https://models.nmb.ai/disco/dpt_large-midas-2f21e586.pt
+    - wget --quiet --output-document=/root/.cache/discoart/512x512_diffusion_uncond_finetune_008100.pt https://models.nmb.ai/disco/512x512_diffusion_uncond_finetune_008100.pt
+    - wget --quiet --output-document=/root/.cache/discoart/256x256_diffusion_uncond.pt https://models.nmb.ai/disco/256x256_diffusion_uncond.pt
+    - wget --quiet --output-document=/root/.cache/discoart/secondary_model_imagenet_2.pth https://models.nmb.ai/disco/secondary_model_imagenet_2.pth
+    - wget --quiet --output-document=/root/.cache/discoart/AdaBins_nyu.pt https://models.nmb.ai/disco/AdaBins_nyu.pt
+    - mkdir -p /root/.cache/clip
+    - wget --quiet --output-document=/root/.cache/clip/RN50.pt https://models.nmb.ai/clip/RN50.pt
+    - wget --quiet --output-document=/root/.cache/clip/RN101.pt https://models.nmb.ai/clip/RN101.pt
+    - wget --quiet --output-document=/root/.cache/clip/RN50x4.pt https://models.nmb.ai/clip/RN50x4.pt
+    - wget --quiet --output-document=/root/.cache/clip/RN50x16.pt https://models.nmb.ai/clip/RN50x16.pt
+    - wget --quiet --output-document=/root/.cache/clip/RN50x64.pt https://models.nmb.ai/clip/RN50x64.pt
+    - wget --quiet --output-document=/root/.cache/clip/ViT-B-32.pt https://models.nmb.ai/clip/ViT-B-32.pt
+    - wget --quiet --output-document=/root/.cache/clip/ViT-B-16.pt https://models.nmb.ai/clip/ViT-B-16.pt
+    - wget --quiet --output-document=/root/.cache/clip/ViT-L-14.pt https://models.nmb.ai/clip/ViT-L-14.pt
+    - wget --quiet --output-document=/root/.cache/clip/ViT-L-14-336px.pt https://models.nmb.ai/clip/ViT-L-14-336px.pt
+    - wget --quiet --output-document=/root/.cache/clip/rn50-quickgelu-yfcc15m-455df137.pt https://models.nmb.ai/clip/rn50-quickgelu-yfcc15m-455df137.pt
+    - wget --quiet --output-document=/root/.cache/clip/rn50-quickgelu-cc12m-f000538c.pt https://models.nmb.ai/clip/rn50-quickgelu-cc12m-f000538c.pt
+    - wget --quiet --output-document=/root/.cache/clip/rn101-quickgelu-yfcc15m-3e04b30e.pt https://models.nmb.ai/clip/rn101-quickgelu-yfcc15m-3e04b30e.pt
+    - wget --quiet --output-document=/root/.cache/clip/vit_b_32-laion2b_e16-af8dbd0c.pth https://models.nmb.ai/clip/vit_b_32-laion2b_e16-af8dbd0c.pth
+    - wget --quiet --output-document=/root/.cache/clip/vit_b_32-quickgelu-laion400m_e31-d867053b.pt https://models.nmb.ai/clip/vit_b_32-quickgelu-laion400m_e31-d867053b.pt
+    - wget --quiet --output-document=/root/.cache/clip/vit_b_32-quickgelu-laion400m_e32-46683a32.pt https://models.nmb.ai/clip/vit_b_32-quickgelu-laion400m_e32-46683a32.pt
+    - wget --quiet --output-document=/root/.cache/clip/vit_b_16-laion400m_e31-00efa78f.pt https://models.nmb.ai/clip/vit_b_16-laion400m_e31-00efa78f.pt
+    - wget --quiet --output-document=/root/.cache/clip/vit_b_16-laion400m_e32-55e67d44.pt https://models.nmb.ai/clip/vit_b_16-laion400m_e32-55e67d44.pt
+    - wget --quiet --output-document=/root/.cache/clip/vit_b_16_plus_240-laion400m_e31-8fb26589.pt https://models.nmb.ai/clip/vit_b_16_plus_240-laion400m_e31-8fb26589.pt
+    - wget --quiet --output-document=/root/.cache/clip/vit_b_16_plus_240-laion400m_e32-699c4b84.pt https://models.nmb.ai/clip/vit_b_16_plus_240-laion400m_e32-699c4b84.pt
+    - wget --quiet --output-document=/root/.cache/clip/vit_l_14-laion400m_e31-69988bb6.pt https://models.nmb.ai/clip/vit_l_14-laion400m_e31-69988bb6.pt
+    - wget --quiet --output-document=/root/.cache/clip/vit_l_14-laion400m_e32-3d133497.pt https://models.nmb.ai/clip/vit_l_14-laion400m_e32-3d133497.pt    
+    - mkdir -p /root/.cache/torch/hub/checkpoints; wget --quiet --output-document=/root/.cache/torch/hub/checkpoints/vgg16-397923af.pth https://models.nmb.ai/disco/vgg16-397923af.pth
+    - wget --quiet --output-document=/root/.cache/discoart/256x256_openai_comics_faces_by_alex_spirin_084000.pt https://models.nmb.ai/disco/256x256_openai_comics_faces_by_alex_spirin_084000.pt
+    - wget --quiet --output-document=/root/.cache/discoart/pixel_art_diffusion_hard_256.pt https://models.nmb.ai/disco/pixel_art_diffusion_hard_256.pt
+    - wget --quiet --output-document=/root/.cache/discoart/pixel_art_diffusion_soft_256.pt https://models.nmb.ai/disco/pixel_art_diffusion_soft_256.pt
+    - wget --quiet --output-document=/root/.cache/discoart/lsun_uncond_100M_1200K_bs128.pt https://models.nmb.ai/disco/lsun_uncond_100M_1200K_bs128.pt    
+    - wget --quiet --output-document=/root/.cache/discoart/ukiyoe_diffusion_256_022000.pt https://models.nmb.ai/disco/ukiyoe_diffusion_256_022000.pt
+    - wget --quiet --output-document=/root/.cache/discoart/PADexpanded.pt https://models.nmb.ai/disco/PADexpanded.pt
+    - wget --quiet --output-document=/root/.cache/discoart/pixelartdiffusion4k.pt https://models.nmb.ai/disco/pixelartdiffusion4k.pt
+    - wget --quiet --output-document=/root/.cache/discoart/watercolordiffusion.pt https://models.nmb.ai/disco/watercolordiffusion.pt
+    - wget --quiet --output-document=/root/.cache/discoart/watercolordiffusion_2.pt https://models.nmb.ai/disco/watercolordiffusion_2.pt
+    - wget --quiet --output-document=/root/.cache/discoart/PulpSciFiDiffusion.pt https://models.nmb.ai/disco/PulpSciFiDiffusion.pt
+    - wget --quiet --output-document=/root/.cache/discoart/liminal_diffusion.pt https://models.nmb.ai/disco/liminal_diffusion.pt
+    - wget --quiet --output-document=/root/.cache/discoart/portrait_generator_v001_ema_0.9999_1MM.pt https://models.nmb.ai/disco/portrait_generator_v001_ema_0.9999_1MM.pt
+    - wget --quiet --output-document=/root/.cache/discoart/floraldiffusion.pt https://models.nmb.ai/disco/floraldiffusion.pt
+    
+image: "r8.im/nightmareai/disco-diffusion"
+predict: "cog.predict.py:Predictor"

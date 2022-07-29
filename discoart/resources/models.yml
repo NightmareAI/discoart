@@ -179,3 +179,9 @@ IsometricDiffusionRevrart512px:
     rescale_timesteps: true
     timestep_respacing: ddim100
     use_scale_shift_norm: true
+
+FloralDiffusion:
+  sha: 197e9068f1ca0248fd89f9d6ca1f6f851783e04fddd0cc5b0020bfa655ed3aeb
+  sources:
+   - https://models.nmb.ai/disco/floraldiffusion.pt
+  recommended_size: [ 512, 448 ]
