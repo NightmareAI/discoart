@@ -211,31 +211,31 @@ class Predictor(BasePredictor):
       if RN101:
         clip_models.append("RN101::openai")
       if ViTB32_laion2b_e16:
-        clip_models.append("ViTB32_laion2b_e16::mlfoundations")
+        clip_models.append("ViTB32::laion2b_e16")
       if ViTB32_laion400m_e31:
-        clip_models.append("ViTB32_laion400m_e31::mlfoundations")
+        clip_models.append("ViTB32::laion400m_e31")
       if ViTB32_laion400m_e32:
-        clip_models.append("ViTB32_laion400m_e32::mlfoundations")
+        clip_models.append("ViTB32::laion400m_e32")
       if ViTB32quickgelu_laion400m_e31:
-        clip_models.append("ViTB32quickgelu_laion400m_e31::mlfoundations")
+        clip_models.append("ViTB32::quickgelu_laion400m_e31")
       if ViTB32quickgelu_laion400m_e32:
-        clip_models.append("ViTB32quickgelu_laion400m_e32::mlfoundations")
+        clip_models.append("ViTB32::quickgelu_laion400m_e32")
       if ViTB16_laion400m_e31:
-        clip_models.append("ViTB16_laion400m_e31::mlfoundations")
+        clip_models.append("ViTB16::laion400m_e31")
       if ViTB16_laion400m_e32:
-        clip_models.append("ViTB16_laion400m_e32::mlfoundations")
+        clip_models.append("ViTB16::laion400m_e32")
       if RN50_yffcc15m:
-        clip_models.append("RN50_yffcc15m::mlfoundations")
+        clip_models.append("RN50::yffcc15m")
       if RN50_cc12m:
-        clip_models.append("RN50_cc12m::mlfoundations")
+        clip_models.append("RN50::cc12m")
       if RN50_quickgelu_yfcc15m:
-        clip_models.append("RN50_quickgelu_yfcc15m::mlfoundations")
+        clip_models.append("RN50::quickgelu_yfcc15m")
       if RN50_quickgelu_cc12m:
-        clip_models.append("RN50_quickgelu_cc12m")
+        clip_models.append("RN50::quickgelu_cc12m")
       if RN101_yfcc15m:
-        clip_models.append("RN101_yfcc15m")
+        clip_models.append("RN101::yfcc15m")
       if RN101_quickgelu_yfcc15m:
-        clip_models.append("RN101_quickgelu_yfcc15m")
+        clip_models.append("RN101::quickgelu_yfcc15m")
       
       if (clip_models != self.clip_model_list):
         self.clip_model_list = clip_models
